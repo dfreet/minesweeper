@@ -1,5 +1,4 @@
-import javax.swing.*;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Random;
 
 public class Minefield {
@@ -8,7 +7,9 @@ public class Minefield {
     int height;
     int totalBombs;
     int totalFlags;
-    Timer timer;
+    boolean initialized;
+    boolean openAroundEmpty;
+    //Timer timer;
 
     public Minefield (int width, int height, int bombs) {
         this.width = width;
@@ -21,6 +22,8 @@ public class Minefield {
                 field[x][y] = new Square(new Point(x,y));
             }
         }
+        this.initialized = false;
+        this.openAroundEmpty = true;
     }
 
     public void initialize() {
@@ -29,7 +32,7 @@ public class Minefield {
         while (bombs < totalBombs) {
             int x = rand.nextInt(width);
             int y = rand.nextInt(height);
-            if (field[x][y].bombsAround == -1) {
+            if (field[x][y].bombsAround == -1 || field[x][y].isOpen) {
                 continue;
             }
             field[x][y].bombsAround = -1;
@@ -48,17 +51,59 @@ public class Minefield {
                 }
             }
         }
+        this.initialized = true;
+    }
+
+    public void openSquare(Point coordinates) {
+        field[coordinates.x][coordinates.y].isOpen = true;
+        if (openAroundEmpty && field[coordinates.x][coordinates.y].bombsAround == 0) {
+            for (int y = Math.max(coordinates.y - 1, 0); y <= Math.min(coordinates.y + 1, height - 1); y++) {
+                for (int x = Math.max(coordinates.x - 1, 0); x <= Math.min(coordinates.x + 1, width - 1); x++) {
+                    if (!field[x][y].isOpen) {
+                        openSquare(new Point(x, y));
+                    }
+                }
+            }
+        }
+    }
+
+    public void flagSquare(Point coordinates) {
+        field[coordinates.x][coordinates.y].isFlagged = !field[coordinates.x][coordinates.y].isFlagged;
+    }
+
+    public String displayState() {
+        final int topBuffer = 5;
+        StringBuilder display = new StringBuilder();
+        display.append(" ".repeat(topBuffer));
+        for (int j = 0; j < width; j++) {
+            display.append((char)('A' + j)).append(" ");
+        }
+        display.append("\n").append(" ".repeat(topBuffer)).append("-".repeat(width*2-1)).append("\n");
+        for (int y = 0; y < height; y++) {
+            display.append(String.format("%" + 2 + "s | ", y));
+            for (int x = 0; x < height; x++) {
+                if (!field[x][y].isOpen && !field[x][y].isFlagged) {
+                    display.append("# ");
+                } else if (field[x][y].isFlagged) {
+                    display.append("⚑ ");
+                } else {
+                    display.append(field[x][y]).append(" ");
+                }
+            }
+            display.append("\n");
+        }
+        return display.toString();
     }
 
     @Override
     public String toString() {
-        String strField = "";
+        StringBuilder strField = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < height; x++) {
-                strField += field[x][y].toString() + " ";
+                strField.append(field[x][y]).append(" ");
             }
-            strField += "\n";
+            strField.append("\n");
         }
-        return strField;
+        return strField.toString();
     }
 }
