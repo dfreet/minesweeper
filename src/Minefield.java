@@ -6,24 +6,24 @@ public class Minefield {
     int width;
     int height;
     int totalBombs;
-    int totalFlags;
     boolean initialized;
     boolean openAroundEmpty;
-    //Timer timer;
 
     public Minefield (int width, int height, int bombs) {
         this.width = width;
         this.height = height;
         this.totalBombs = Math.min(bombs, width * height);
-        this.totalFlags = 0;
+        this.initialized = false;
+        this.openAroundEmpty = true;
+    }
+
+    public void createField() {
         this.field = new Square[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 field[x][y] = new Square(new Point(x,y));
             }
         }
-        this.initialized = false;
-        this.openAroundEmpty = true;
     }
 
     public void initialize() {
@@ -54,17 +54,19 @@ public class Minefield {
         this.initialized = true;
     }
 
-    public void openSquare(Point coordinates) {
+    public boolean openSquare(Point coordinates) {
         field[coordinates.x][coordinates.y].isOpen = true;
-        if (openAroundEmpty && field[coordinates.x][coordinates.y].bombsAround == 0) {
+        boolean gameOver = field[coordinates.x][coordinates.y].bombsAround == -1;
+        if (openAroundEmpty && field[coordinates.x][coordinates.y].bombsAround == 0 && !gameOver) {
             for (int y = Math.max(coordinates.y - 1, 0); y <= Math.min(coordinates.y + 1, height - 1); y++) {
                 for (int x = Math.max(coordinates.x - 1, 0); x <= Math.min(coordinates.x + 1, width - 1); x++) {
                     if (!field[x][y].isOpen) {
-                        openSquare(new Point(x, y));
+                        gameOver = openSquare(new Point(x, y));
                     }
                 }
             }
         }
+        return gameOver;
     }
 
     public void flagSquare(Point coordinates) {
@@ -93,6 +95,17 @@ public class Minefield {
             display.append("\n");
         }
         return display.toString();
+    }
+
+    public boolean gameWon() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (field[x][y].bombsAround > -1 && !field[x][y].isOpen) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
