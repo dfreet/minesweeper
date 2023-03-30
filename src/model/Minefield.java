@@ -19,6 +19,8 @@ public class Minefield {
         this.openAroundEmpty = true;
     }
 
+    public boolean isInitialized() { return initialized; }
+
     public void createField() {
         this.field = new Square[width][height];
         for (int y = 0; y < height; y++) {

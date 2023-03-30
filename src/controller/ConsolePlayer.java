@@ -1,4 +1,4 @@
-package model;
+package controller;
 
 import model.Minefield;
 
@@ -25,7 +25,7 @@ public class ConsolePlayer {
                     case "OPEN" -> {
                         Point coordinates = getCoordinates(arguments[1]);
                         gameOver = field.openSquare(coordinates);
-                        if (!field.initialized) {
+                        if (!field.isInitialized()) {
                             field.initialize();
                             field.openSquare(coordinates);
                         } else if (field.gameWon()) {

@@ -1,4 +1,4 @@
-import model.ConsolePlayer;
+import controller.ConsolePlayer;
 
 public class Main {
     public static final boolean consoleMode = true;
