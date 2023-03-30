@@ -1,3 +1,7 @@
+package model;
+
+import model.Minefield;
+
 import java.awt.*;
 
 public class GuiMinefield extends Minefield {

@@ -1,3 +1,5 @@
+import model.ConsolePlayer;
+
 public class Main {
     public static final boolean consoleMode = true;
 

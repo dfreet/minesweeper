@@ -1,3 +1,7 @@
+package model;
+
+import model.Minefield;
+
 import java.awt.*;
 import java.util.Scanner;
 import java.util.regex.Matcher;

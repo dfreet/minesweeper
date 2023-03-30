@@ -1,3 +1,7 @@
+package model;
+
+import model.Square;
+
 import javax.swing.*;
 import java.awt.*;
 
