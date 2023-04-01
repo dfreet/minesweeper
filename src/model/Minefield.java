@@ -34,7 +34,7 @@ public class Minefield implements Iterable<Square> {
     @Override
     public Iterator<Square> iterator() { return new MinefieldIterator(field); }
 
-    public GroupIterator groupIterator(Point center) { return new GroupIterator(field, center); }
+    public SquareGroup getSquareGroup(Point center) { return new SquareGroup(field, center); }
 
     public void initialize() {
         int bombs = 0;
@@ -55,9 +55,8 @@ public class Minefield implements Iterable<Square> {
                 continue;
             }
             square.bombsAround = 0;
-            GroupIterator groupIterator = groupIterator(square.position);
-            while (groupIterator.hasNext()) {
-                square.bombsAround += groupIterator.next().bombsAround == -1 ? 1 : 0;
+            for (Square groupSquare : getSquareGroup(square.position)) {
+                square.bombsAround += groupSquare.bombsAround == -1 ? 1 : 0;
             }
         }
         this.initialized = true;
@@ -68,9 +67,7 @@ public class Minefield implements Iterable<Square> {
         Square square = getSquare(coordinates);
         square.isOpen = true;
         if (openAroundEmpty && square.bombsAround == 0) {
-            GroupIterator iterator = groupIterator(coordinates);
-            while (iterator.hasNext()) {
-                Square groupSquare = iterator.next();
+            for (Square groupSquare : getSquareGroup(coordinates)) {
                 if (!groupSquare.isOpen) {
                     openSquare(groupSquare.position);
                 }

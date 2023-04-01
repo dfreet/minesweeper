@@ -1,6 +1,8 @@
 package controller;
 
+import model.GroupIterator;
 import model.Minefield;
+import model.MinefieldIterator;
 import model.Square;
 import view.GuiView;
 
@@ -55,8 +57,31 @@ public class GuiController {
                             gameOver(true);
                         }
                     } else if (SwingUtilities.isRightMouseButton(e)) {
-                        square.toggleFlag();
-                        refresh();
+                        if (!square.isOpen()) {
+                            square.toggleFlag();
+                            refresh();
+                        }
+                    } else if (SwingUtilities.isMiddleMouseButton(e)) {
+                        if (square.isOpen() && square.getBombsAround() > 0) {
+                            int flagsAround = 0;
+                            for (Square groupSquare : field.getSquareGroup(square.getPosition())) {
+                                flagsAround += groupSquare.isFlagged() ? 1 : 0;
+                            }
+                            if (flagsAround == square.getBombsAround()) {
+                                boolean gameOver = false;
+                                for (Square groupSquare : field.getSquareGroup(square.getPosition())) {
+                                    if (!groupSquare.isFlagged()) {
+                                        gameOver = gameOver || field.openSquare(groupSquare.getPosition());
+                                    }
+                                }
+                                refresh();
+                                if (gameOver) {
+                                    gameOver(false);
+                                } else if (field.gameWon()) {
+                                    gameOver(true);
+                                }
+                            }
+                        }
                     }
                 }
             });
