@@ -19,6 +19,8 @@ public class Square {
 
     public boolean isOpen() { return isOpen; }
 
+    public boolean isFlagged() { return isFlagged; }
+
     public int getBombsAround() { return bombsAround; }
 
     public Point getPosition() { return position; }

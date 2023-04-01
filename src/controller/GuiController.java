@@ -6,6 +6,8 @@ import view.GuiView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GuiController {
@@ -31,18 +33,31 @@ public class GuiController {
             squares.add(guiSquare);
             if (debug) { guiSquare.setText(square.toString()); }
             view.form().getFieldPanel().add(guiSquare);
-            guiSquare.addActionListener(a -> {
-                if (field.openSquare(guiSquare.square.getPosition())) {
-                    gameOver(false);
-                    return;
-                }
-                if (field.uninitialized()) {
-                    field.initialize();
-                    field.openSquare(guiSquare.square.getPosition());
-                }
-                refresh();
-                if (field.gameWon()) {
-                    gameOver(true);
+            guiSquare.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        if (square.isFlagged()) {
+                            square.toggleFlag();
+                            refresh();
+                            return;
+                        }
+                        if (field.openSquare(square.getPosition())) {
+                            gameOver(false);
+                            return;
+                        }
+                        if (field.uninitialized()) {
+                            field.initialize();
+                            field.openSquare(square.getPosition());
+                        }
+                        refresh();
+                        if (field.gameWon()) {
+                            gameOver(true);
+                        }
+                    } else if (SwingUtilities.isRightMouseButton(e)) {
+                        square.toggleFlag();
+                        refresh();
+                    }
                 }
             });
         }
@@ -54,6 +69,10 @@ public class GuiController {
             if (square.square.isOpen()) {
                 square.setEnabled(false);
                 square.setText(square.square.getBombsAround() == 0 ? "" : square.square.toString());
+            } else if (square.square.isFlagged()) {
+                square.setText("⚑");
+            } else {
+                square.setText("");
             }
             if (debug) {
                 square.setText(square.square.toString());
