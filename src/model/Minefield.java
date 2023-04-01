@@ -27,7 +27,7 @@ public class Minefield implements Iterable<Square> {
         }
     }
 
-    public boolean isInitialized() { return initialized; }
+    public boolean uninitialized() { return !initialized; }
 
     public Square getSquare (Point position) { return field[position.x][position.y]; }
 

@@ -27,10 +27,11 @@ public class ConsolePlayer {
                     case "OPEN" -> {
                         Point coordinates = getCoordinates(arguments[1]);
                         gameOver = field.openSquare(coordinates);
-                        if (!field.isInitialized()) {
+                        if (field.uninitialized()) {
                             field.initialize();
                             field.openSquare(coordinates);
-                        } else if (field.gameWon()) {
+                        }
+                        if (field.gameWon()) {
                             gameOver = true;
                             win = true;
                         }
