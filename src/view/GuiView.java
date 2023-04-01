@@ -12,5 +12,10 @@ public class GuiView extends JFrame {
        this.pack();
        this.setTitle("Minesweeper");
        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+       JMenuBar menuBar = new JMenuBar();
+       JMenu menu = new JMenu("Menu");
+       menuBar.add(menu);
+       this.setJMenuBar(menuBar);
     }
 }

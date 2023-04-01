@@ -15,6 +15,8 @@ public class Square {
         this.isFlagged = false;
     }
 
+    public void toggleFlag() { isFlagged = !isFlagged; }
+
     @Override
     public String toString() {
         if (bombsAround < 0) {

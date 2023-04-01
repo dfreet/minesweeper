@@ -8,10 +8,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConsolePlayer {
-    public static void play() {
-        Minefield field = new Minefield(10, 10, 10);
+    public static void play(boolean debug) {
+        Minefield field = new Minefield(9, 9, 10);
         field.createField();
-        System.out.print(field.displayState());
+        if (debug) {
+            System.out.println(field.fieldState());
+        }
+        System.out.print(field);
 
         Scanner input = new Scanner(System.in);
         boolean gameOver = false;
@@ -32,11 +35,17 @@ public class ConsolePlayer {
                             gameOver = true;
                             win = true;
                         }
-                        System.out.print(field.displayState());
+                        if (debug) {
+                            System.out.println(field.fieldState());
+                        }
+                        System.out.print(field);
                     }
                     case "FLAG" -> {
                         field.flagSquare(getCoordinates(arguments[1]));
-                        System.out.print(field.displayState());
+                        if (debug) {
+                            System.out.println(field.fieldState());
+                        }
+                        System.out.print(field);
                     }
                     case "EXIT" -> {
                         return;
