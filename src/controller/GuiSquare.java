@@ -3,7 +3,7 @@ package controller;
 import model.Square;
 
 import javax.swing.*;
-import java.awt.Dimension;
+import java.awt.*;
 
 public class GuiSquare extends JButton {
     Square square;
@@ -12,5 +12,6 @@ public class GuiSquare extends JButton {
         super();
         this.square = square;
         this.setMinimumSize(new Dimension(10, 10));
+        this.setMargin(new Insets(0, 0, 0, 0));
     }
 }

@@ -17,6 +17,10 @@ public class Square {
 
     public void toggleFlag() { isFlagged = !isFlagged; }
 
+    public boolean isOpen() { return isOpen; }
+
+    public Point getPosition() { return position; }
+
     @Override
     public String toString() {
         if (bombsAround < 0) {

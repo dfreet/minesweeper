@@ -11,7 +11,7 @@ public class Main {
             ConsolePlayer.play(debug);
         } else {
             GuiView view = new GuiView();
-            new GuiController(view);
+            new GuiController(view, debug);
             view.setVisible(true);
         }
     }
