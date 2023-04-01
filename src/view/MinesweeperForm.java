@@ -10,4 +10,5 @@ public class MinesweeperForm {
         return mainPanel;
     }
 
+    public JPanel getFieldPanel() { return fieldPanel; }
 }

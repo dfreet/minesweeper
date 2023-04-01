@@ -1,14 +1,24 @@
 package controller;
 
 import model.Minefield;
+import model.Square;
 import view.GuiView;
 
+import java.awt.*;
+
 public class GuiController {
-    private GuiView view;
 
     public GuiController(GuiView view) {
-        this.view = view;
-        Minefield field = new Minefield(9, 9, 10);
+        int width = 9;
+        int height = 9;
+        Minefield field = new Minefield(width, height, 10);
+        view.form().getFieldPanel().setLayout(new GridLayout(width, height));
+        view.form().getFieldPanel().setPreferredSize(new Dimension(width * 10, height * 10));
+        for (Square square: field) {
+            GuiSquare guiSquare = new GuiSquare(square);
+            view.form().getFieldPanel().add(guiSquare);
+        }
+        view.pack();
     }
 
 }

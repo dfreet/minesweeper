@@ -18,4 +18,6 @@ public class GuiView extends JFrame {
        menuBar.add(menu);
        this.setJMenuBar(menuBar);
     }
+
+    public MinesweeperForm form() { return form; }
 }

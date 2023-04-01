@@ -18,6 +18,13 @@ public class Minefield implements Iterable<Square> {
         this.totalBombs = Math.min(bombs, width * height);
         this.initialized = false;
         this.openAroundEmpty = true;
+
+        this.field = new Square[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                field[x][y] = new Square(new Point(x,y));
+            }
+        }
     }
 
     public boolean isInitialized() { return initialized; }
@@ -28,15 +35,6 @@ public class Minefield implements Iterable<Square> {
     public Iterator<Square> iterator() { return new MinefieldIterator(field); }
 
     public GroupIterator groupIterator(Point center) { return new GroupIterator(field, center); }
-
-    public void createField() {
-        this.field = new Square[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                field[x][y] = new Square(new Point(x,y));
-            }
-        }
-    }
 
     public void initialize() {
         int bombs = 0;
@@ -61,29 +59,7 @@ public class Minefield implements Iterable<Square> {
             while (groupIterator.hasNext()) {
                 square.bombsAround += groupIterator.next().bombsAround == -1 ? 1 : 0;
             }
-            /*
-            for (int y = Math.max(iterator.yPos-1,0); y <= Math.min(iterator.yPos+1,height-1); y++) {
-                for (int x = Math.max(iterator.xPos-1,0); x <= Math.min(iterator.xPos+1,width-1); x++) {
-                    square.bombsAround += field[x][y].bombsAround == -1 ? 1 : 0;
-                }
-            }
-             */
         }
-        /*
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (field[x][y].bombsAround == -1) {
-                    continue;
-                }
-                field[x][y].bombsAround = 0;
-                for (int j = Math.max(y-1,0); j <= Math.min(y+1,height-1); j++) {
-                    for (int i = Math.max(x-1,0); i <= Math.min(x+1,height-1); i++) {
-                        field[x][y].bombsAround += field[i][j].bombsAround == -1 ? 1 : 0;
-                    }
-                }
-            }
-        }
-         */
         this.initialized = true;
     }
 
@@ -99,15 +75,6 @@ public class Minefield implements Iterable<Square> {
                     openSquare(groupSquare.position);
                 }
             }
-            /*
-            for (int y = Math.max(coordinates.y - 1, 0); y <= Math.min(coordinates.y + 1, height - 1); y++) {
-                for (int x = Math.max(coordinates.x - 1, 0); x <= Math.min(coordinates.x + 1, width - 1); x++) {
-                    if (!field[x][y].isOpen) {
-                        openSquare(new Point(x, y));
-                    }
-                }
-            }
-             */
         }
         return square.bombsAround == -1;
     }
@@ -123,15 +90,6 @@ public class Minefield implements Iterable<Square> {
                 return false;
             }
         }
-        /*
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (field[x][y].bombsAround > -1 && !field[x][y].isOpen) {
-                    return false;
-                }
-            }
-        }
-        */
         return true;
     }
 

@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class ConsolePlayer {
     public static void play(boolean debug) {
         Minefield field = new Minefield(9, 9, 10);
-        field.createField();
         if (debug) {
             System.out.println(field.fieldState());
         }
