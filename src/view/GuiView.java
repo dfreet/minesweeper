@@ -20,7 +20,7 @@ public class GuiView extends JFrame {
 
        JMenuBar menuBar = new JMenuBar();
        JMenu gameMnu = new JMenu("Game");
-       ButtonGroup buttonGroup = new ButtonGroup();
+       ButtonGroup gameModeGroup = new ButtonGroup();
 
        beginnerBtn = new JRadioButton("Beginner (9x9) 10", true);
        intermediateBtn = new JRadioButton("Intermediate (16x16) 40");
@@ -30,10 +30,10 @@ public class GuiView extends JFrame {
        JMenuItem exitItm = new JMenuItem("Exit");
        exitItm.addActionListener(a -> System.exit(0));
 
-       buttonGroup.add(beginnerBtn);
-       buttonGroup.add(intermediateBtn);
-       buttonGroup.add(expertBtn);
-       buttonGroup.add(customBtn);
+       gameModeGroup.add(beginnerBtn);
+       gameModeGroup.add(intermediateBtn);
+       gameModeGroup.add(expertBtn);
+       gameModeGroup.add(customBtn);
 
        gameMnu.add(beginnerBtn);
        gameMnu.add(intermediateBtn);
@@ -41,6 +41,7 @@ public class GuiView extends JFrame {
        gameMnu.add(customBtn);
        gameMnu.add(newGameItm);
        gameMnu.add(exitItm);
+
        menuBar.add(gameMnu);
        this.setJMenuBar(menuBar);
     }

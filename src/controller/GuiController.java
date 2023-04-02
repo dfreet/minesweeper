@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class GuiController {
@@ -16,6 +15,8 @@ public class GuiController {
     boolean debug;
     Minefield field;
     ArrayList<GuiSquare> squares;
+    Timer timer;
+    int time = 0;
     int width;
     int height;
     int bombs;
@@ -25,6 +26,11 @@ public class GuiController {
         width = 9;
         height = 9;
         bombs = 10;
+        timer = new Timer(1000, a -> {
+            time++;
+            view.form().getTimeLbl().setText(String.format("%-" + 6 + "s", time));
+        });
+        timer.setRepeats(true);
         view.getNewGameItm().addActionListener(a -> initialize());
         view.getBeginnerBtn().addActionListener(a -> { width = 9; height = 9; bombs = 10; });
         view.getIntermediateBtn().addActionListener(a -> { width = 16; height = 16; bombs = 40; });
@@ -58,10 +64,14 @@ public class GuiController {
             }
             view.getCustomBtn().setText("Custom [(" + width + "x" + height + ") " + bombs + "]");
         });
+
         initialize();
     }
 
     public void initialize() {
+        time = 0;
+        view.form().getTimeLbl().setText(String.format("%-" + 6 + "s", time));
+        view.form().getBombsLbl().setText(String.format("%" + 6 + "s", bombs));
         view.form().getFieldPanel().removeAll();
         squares = new ArrayList<>();
         field = new Minefield(width, height, bombs);
@@ -87,6 +97,7 @@ public class GuiController {
                         }
                         if (field.uninitialized()) {
                             field.initialize();
+                            timer.start();
                             field.openSquare(square.getPosition());
                         }
                         refresh();
@@ -127,12 +138,14 @@ public class GuiController {
     }
 
     public void refresh() {
+        int totalFlags = 0;
         for (GuiSquare square: squares) {
             if (square.square.isOpen()) {
                 square.setEnabled(false);
                 square.setText(square.square.getBombsAround() == 0 ? "" : square.square.toString());
             } else if (square.square.isFlagged()) {
                 square.setText("⚑");
+                totalFlags++;
             } else {
                 square.setText("");
             }
@@ -140,9 +153,11 @@ public class GuiController {
                 square.setText(square.square.toString());
             }
         }
+        view.form().getBombsLbl().setText(String.format("%" + 6 + "s", bombs - totalFlags));
     }
 
     public void gameOver(boolean win) {
+        timer.stop();
         if (!win) {
             for (GuiSquare square : squares) {
                 if (square.square.getBombsAround() == -1) {
