@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class GuiController {
@@ -28,6 +29,35 @@ public class GuiController {
         view.getBeginnerBtn().addActionListener(a -> { width = 9; height = 9; bombs = 10; });
         view.getIntermediateBtn().addActionListener(a -> { width = 16; height = 16; bombs = 40; });
         view.getExpertBtn().addActionListener(a -> { width = 30; height = 16; bombs = 99; });
+        // Max: 120x50
+        view.getCustomBtn().addActionListener(a -> {
+            SpinnerModel widthModel = new SpinnerNumberModel(30, 2, 120, 1);
+            SpinnerModel heightModel = new SpinnerNumberModel(20, 1, 50, 1);
+            SpinnerModel bombsModel = new SpinnerNumberModel(145, 1, 5999, 1);
+            JSpinner widthSpn = new JSpinner(widthModel);
+            JSpinner heightSpn = new JSpinner(heightModel);
+            JSpinner bombsSpn = new JSpinner(bombsModel);
+            JComponent[] inputs = new JComponent[] {
+                    new JLabel("Width"),
+                    widthSpn,
+                    new JLabel("Height"),
+                    heightSpn,
+                    new JLabel("Bombs"),
+                    bombsSpn
+            };
+            int result = JOptionPane.showConfirmDialog(null, inputs, "Custom Size",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                width = (int)widthSpn.getValue();
+                height = (int)heightSpn.getValue();
+                bombs = Math.min((int)bombsSpn.getValue(), width * height - 1);
+            } else {
+                width = 30;
+                height = 20;
+                bombs = 145;
+            }
+            view.getCustomBtn().setText("Custom [(" + width + "x" + height + ") " + bombs + "]");
+        });
         initialize();
     }
 

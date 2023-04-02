@@ -8,6 +8,7 @@ public class GuiView extends JFrame {
     private final JRadioButton beginnerBtn;
     private final JRadioButton intermediateBtn;
     private final JRadioButton expertBtn;
+    private final JRadioButton customBtn;
 
     public GuiView() {
        this.form = new MinesweeperForm();
@@ -23,7 +24,8 @@ public class GuiView extends JFrame {
 
        beginnerBtn = new JRadioButton("Beginner (9x9) 10", true);
        intermediateBtn = new JRadioButton("Intermediate (16x16) 40");
-       expertBtn = new JRadioButton("Expert (16x30) 99");
+       expertBtn = new JRadioButton("Expert (30x16) 99");
+       customBtn = new JRadioButton("Custom");
        newGameItm = new JMenuItem("New Game");
        JMenuItem exitItm = new JMenuItem("Exit");
        exitItm.addActionListener(a -> System.exit(0));
@@ -31,10 +33,12 @@ public class GuiView extends JFrame {
        buttonGroup.add(beginnerBtn);
        buttonGroup.add(intermediateBtn);
        buttonGroup.add(expertBtn);
+       buttonGroup.add(customBtn);
 
        gameMnu.add(beginnerBtn);
        gameMnu.add(intermediateBtn);
        gameMnu.add(expertBtn);
+       gameMnu.add(customBtn);
        gameMnu.add(newGameItm);
        gameMnu.add(exitItm);
        menuBar.add(gameMnu);
@@ -48,6 +52,8 @@ public class GuiView extends JFrame {
     public JRadioButton getIntermediateBtn() { return intermediateBtn; }
 
     public JRadioButton getExpertBtn() { return expertBtn; }
+
+    public JRadioButton getCustomBtn() { return customBtn; }
 
     public MinesweeperForm form() { return form; }
 }
