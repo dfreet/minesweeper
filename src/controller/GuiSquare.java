@@ -11,7 +11,7 @@ public class GuiSquare extends JButton {
     public GuiSquare(Square square) {
         super();
         this.square = square;
-        this.setMinimumSize(new Dimension(10, 10));
+        this.setMinimumSize(new Dimension(30, 30));
         this.setMargin(new Insets(0, 0, 0, 0));
     }
 }

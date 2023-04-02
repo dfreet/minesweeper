@@ -1,8 +1,6 @@
 package controller;
 
-import model.GroupIterator;
 import model.Minefield;
-import model.MinefieldIterator;
 import model.Square;
 import view.GuiView;
 
@@ -17,18 +15,27 @@ public class GuiController {
     boolean debug;
     Minefield field;
     ArrayList<GuiSquare> squares;
+    int width;
+    int height;
+    int bombs;
     public GuiController(GuiView view, boolean debug) {
         this.view = view;
         this.debug = debug;
+        width = 9;
+        height = 9;
+        bombs = 10;
+        view.getNewGameItm().addActionListener(a -> initialize());
+        view.getBeginnerBtn().addActionListener(a -> { width = 9; height = 9; bombs = 10; });
+        view.getIntermediateBtn().addActionListener(a -> { width = 16; height = 16; bombs = 40; });
+        view.getExpertBtn().addActionListener(a -> { width = 30; height = 16; bombs = 99; });
         initialize();
     }
 
     public void initialize() {
+        view.form().getFieldPanel().removeAll();
         squares = new ArrayList<>();
-        int width = 9;
-        int height = 9;
-        field = new Minefield(width, height, 10);
-        view.form().getFieldPanel().setLayout(new GridLayout(width, height));
+        field = new Minefield(width, height, bombs);
+        view.form().getFieldPanel().setLayout(new GridLayout(height, width));
         view.form().getFieldPanel().setPreferredSize(new Dimension(width * 10, height * 10));
         for (Square square: field) {
             GuiSquare guiSquare = new GuiSquare(square);
@@ -121,7 +128,6 @@ public class GuiController {
         if (action == 1) {
             System.exit(0);
         } else {
-            view.form().getFieldPanel().removeAll();
             initialize();
         }
     }
